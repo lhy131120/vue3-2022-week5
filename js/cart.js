@@ -1,4 +1,4 @@
-import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.45/vue.esm-browser.min.js'
+// import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.45/vue.esm-browser.min.js'
 
 const domain = 'https://vue3-course-api.hexschool.io/v2'
 const api_path = 'sakimotorin-vue2022'
@@ -66,7 +66,7 @@ const productModal = {
 }
 
 // 根元件
-const vm = createApp({
+const vm = Vue.createApp({
   data() {
     return {
       products: [],
