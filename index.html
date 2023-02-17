@@ -18,7 +18,8 @@
     <div class="container">
       <div class="mt-4">
         <!-- 產品Modal -->
-        <product-modal :id="productId" :add-to-cart="addToCart" ref="productModal" :open-modal="openModal"></product-modal>
+        <product-modal :id="productId" :add-to-cart="addToCart" ref="productModal"
+          :open-modal="openModal"></product-modal>
         <!-- 產品Modal -->
 
         <table class="table align-middle">
@@ -131,87 +132,121 @@
         </table>
 
       </div>
-      <!-- <div class="my-5 row justify-content-center">
-        <v-form ref="form" class="col-md-6" v-slot="{ errors }">
+      <div class="my-5 row justify-content-center">
+        <v-form ref="form" class="col-md-6" v-slot="{ errors }" @submit="onSubmit">
+          <!-- =====測試用====== -->
+          <!-- {{ errors }} -->
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <v-field id="email" name="email" type="email" class="form-control"
-              :class="{ 'is-invalid': errors['email'] }" placeholder="請輸入 Email"></v-field>
+            <v-field 
+            id="email" 
+            name="email" 
+            type="email"
+            class="form-control" 
+            placeholder="請輸入 Email"
+            rules="email|required"
+            v-model="user.email" 
+            :class="{ 'is-invalid': errors['email'] }" 
+            ></v-field>
             <error-message name="email" class="invalid-feedback"></error-message>
           </div>
 
           <div class="mb-3">
             <label for="name" class="form-label">收件人姓名</label>
-            <v-field id="name" name="姓名" type="text" class="form-control" :class="{ 'is-invalid': errors['姓名'] }"
-              placeholder="請輸入姓名" rules="required"></v-field>
+            <v-field 
+            id="name" 
+            name="姓名" 
+            type="text" 
+            class="form-control" 
+            placeholder="請輸入姓名" 
+            rules="required|min:2"
+            v-model="user.name"
+            :class="{ 'is-invalid': errors['姓名'] }"
+            ></v-field>
             <error-message name="姓名" class="invalid-feedback"></error-message>
           </div>
 
           <div class="mb-3">
             <label for="tel" class="form-label">收件人電話</label>
-            <v-field id="tel" name="電話" type="text" class="form-control" :class="{ 'is-invalid': errors['電話'] }"
-              placeholder="請輸入電話"></v-field>
+            <v-field 
+            id="tel" 
+            name="電話" 
+            type="text" 
+            class="form-control" 
+            placeholder="請輸入電話" 
+            rules="required|min:8"
+            v-model="user.tel"
+            :class="{ 'is-invalid': errors['電話'] }"
+            ></v-field>
             <error-message name="電話" class="invalid-feedback"></error-message>
           </div>
 
           <div class="mb-3">
             <label for="address" class="form-label">收件人地址</label>
-            <v-field id="address" name="地址" type="text" class="form-control" :class="{ 'is-invalid': errors['地址'] }"
-              placeholder="請輸入地址" rules="required"></v-field>
+            <v-field 
+            id="address" 
+            name="地址" 
+            type="text" 
+            class="form-control" 
+            placeholder="請輸入地址" 
+            rules="required" 
+            v-model="user.address"
+            :class="{ 'is-invalid': errors['地址'] }"
+            ></v-field>
             <error-message name="地址" class="invalid-feedback"></error-message>
           </div>
 
           <div class="mb-3">
             <label for="message" class="form-label">留言</label>
-            <textarea id="message" class="form-control" cols="30" rows="10"></textarea>
+            <textarea id="message" class="form-control" cols="30" rows="10" v-model="user.message"></textarea>
           </div>
           <div class="text-end">
             <button type="submit" class="btn btn-danger">送出訂單</button>
           </div>
         </v-form>
-      </div> -->
+      </div>
     </div>
   </div>
   <script type="text/x-template" id="userProductModal">
-  <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true" ref="modal">
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content border-0">
-        <div class="modal-header bg-dark text-white">
-          <h5 class="modal-title" id="exampleModalLabel">
-            <span>{{ tempProduct.title }}</span>
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-sm-6">
-              <img class="img-fluid" :src="tempProduct.imageUrl" alt="">
-            </div>
-            <div class="col-sm-6">
-              <span class="badge bg-primary rounded-pill">{{ }}</span>
-              <p>商品描述：{{ tempProduct.description}}</p>
-              <p>商品內容：{{ tempProduct.content }}</p>
-              <div v-if="tempProduct.price === tempProduct.origin_price" class="h5">{{ tempProduct.price }} 元</div>
-              <div v-else>
-                <del class="h6">原價 {{ tempProduct.origin_price }} 元</del>
-              <div class="h5">現在只要 {{ tempProduct.price }} 元</div>
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true" ref="modal">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content border-0">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title" id="exampleModalLabel">
+              <span>{{ tempProduct.title }}</span>
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-6">
+                <img class="img-fluid" :src="tempProduct.imageUrl" alt="">
               </div>
-              <div>
-                <div class="input-group">
-                  <select name="" id="" class="form-select" v-model="qty">
-                    <option :value="i" v-for="i in 20" :key="`${1}-value`">{{ i }}</option>
-                  </select>
-                  <button type="button" class="btn btn-primary" @click="addToCart(tempProduct.id, qty)">加入購物車</button>
+              <div class="col-sm-6">
+                <span class="badge bg-primary rounded-pill">{{ }}</span>
+                <p>商品描述：{{ tempProduct.description}}</p>
+                <p>商品內容：{{ tempProduct.content }}</p>
+                <div v-if="tempProduct.price === tempProduct.origin_price" class="h5">{{ tempProduct.price }} 元</div>
+                <div v-else>
+                  <del class="h6">原價 {{ tempProduct.origin_price }} 元</del>
+                <div class="h5">現在只要 {{ tempProduct.price }} 元</div>
+                </div>
+                <div>
+                  <div class="input-group">
+                    <select name="" id="" class="form-select" v-model="qty">
+                      <option :value="i" v-for="i in 20" :key="`${1}-value`">{{ i }}</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" @click="addToCart(tempProduct.id, qty)">加入購物車</button>
+                  </div>
                 </div>
               </div>
+              <!-- col-sm-6 end -->
             </div>
-            <!-- col-sm-6 end -->
           </div>
         </div>
       </div>
     </div>
-  </div>
   </script>
 
   <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js'
