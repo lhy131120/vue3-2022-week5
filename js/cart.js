@@ -23,6 +23,7 @@ configure({
   generateMessage: localize('zh_TW'),
 })
 
+
 // 元件
 const productModal = {
   props: ['id', 'addToCart', 'openModal'],
@@ -65,22 +66,27 @@ const productModal = {
   },
 }
 
+console.log(VueLoading);
 // 根元件
 const vm = Vue.createApp({
   data() {
     return {
+      isLoading: false,
       products: [],
       productId: '',
       cart: {},
       loadingItem: '',
       clearAll: false,
-      user: {
-        name: '',
-        email: '',
-        tel: '',
-        address: '',
-        message: '',
+      data: {
+        user: {
+          name: '',
+          email: '',
+          tel: '',
+          address: '',
+          message: '',
+        },
       },
+      cart: {}
     }
   },
   components: {
@@ -90,8 +96,25 @@ const vm = Vue.createApp({
     ErrorMessage: ErrorMessage,
   },
   methods: {
+    getCart() {
+      axios.get(`${domain}/api/${api_path}/cart`).then((res) => {
+        this.cart = res.data.data;
+      }).catch((err) => {
+        alert(err.response.data.message);
+      });
+    },
     onSubmit() {
       console.log('onSubmit')
+      const data = this.data;
+      axios.post(`${domain}/api/${api_path}/order`, { data })
+        .then(res => {
+          alert(`${res.data.message}, 訂單號碼是:${res.data.orderId}`)
+          this.$refs.form.resetForm()
+          this.getCart();
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     getProducts() {
       axios.get(`${domain}/api/${api_path}/products/all`).then((res) => {
@@ -154,11 +177,21 @@ const vm = Vue.createApp({
         this.getCarts()
       })
     },
+    loadingInit() {
+      let loader = this.$loading.show();
+      // simulate AJAX
+      setTimeout(() => {
+        loader.hide()
+      }, 1500)
+    }
   },
   mounted() {
+    this.loadingInit();
     this.getProducts()
     this.getCarts()
   },
 })
 
+// vm.component('loading', VueLoading.component);
+vm.use(VueLoading.LoadingPlugin);
 vm.mount('#app')
