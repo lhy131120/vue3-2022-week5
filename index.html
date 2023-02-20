@@ -147,14 +147,14 @@
 
           <div class="mb-3">
             <label for="name" class="form-label">收件人姓名</label>
-            <v-field id="name" name="姓名" type="text" class="form-control" placeholder="請輸入姓名" rules="required|min:2"
+            <v-field id="name" name="姓名" type="text" class="form-control" placeholder="請輸入姓名" rules="required|alpha|min:2"
               v-model="data.user.name" :class="{ 'is-invalid': errors['姓名'] }"></v-field>
             <error-message name="姓名" class="invalid-feedback"></error-message>
           </div>
 
           <div class="mb-3">
             <label for="tel" class="form-label">收件人電話</label>
-            <v-field id="tel" name="電話" type="text" class="form-control" placeholder="請輸入電話" rules="required|min:8"
+            <v-field id="tel" name="電話" type="text" class="form-control" placeholder="請輸入電話" rules="required|numeric|min:8"
               v-model="data.user.tel" :class="{ 'is-invalid': errors['電話'] }"></v-field>
             <error-message name="電話" class="invalid-feedback"></error-message>
           </div>
